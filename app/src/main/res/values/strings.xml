@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">MyEmergencyBot</string>
+    <string name="help">Помощь</string>
+    <string name="set">set</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="settings">Настройки</string>
+    <string name="Contacts">Контакты</string>
+    <string name="Back">Back</string>
+    <string name="Message">Сообщение</string>
+    <string name="Button">Кнопка</string>
 </resources>
