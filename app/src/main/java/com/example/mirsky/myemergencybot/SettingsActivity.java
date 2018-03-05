@@ -1,5 +1,6 @@
 package com.example.mirsky.myemergencybot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -42,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()) {
                 case R.id.txtContacts:
-                    justMessage("Эта часть приложения ещё доробатывается");
+                    startActivity(new Intent(SettingsActivity.this, ContactsActivity.class));
                     break;
                 case R.id.txtMessage:
                     justMessage("Эта часть приложения ещё доробатывается");
