@@ -31,6 +31,10 @@
         <activity
             android:name=".newContactActivity"
             android:label="@string/title_activity_new_contact"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ButtonSettingsActivity"
+            android:label="@string/title_activity_button_settings"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

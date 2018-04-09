@@ -49,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
                     justMessage("Эта часть приложения ещё доробатывается");
                     break;
                 case R.id.txtButton:
-                    justMessage("Эта часть приложения ещё доробатывается");
+                    startActivity(new Intent(SettingsActivity.this, ButtonSettingsActivity.class));
                     break;
             }
         }

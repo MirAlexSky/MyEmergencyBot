@@ -1,6 +1,7 @@
 package com.example.mirsky.myemergencybot;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,24 @@ public class MainActivity extends AppCompatActivity {
 
         btnHelp.setOnClickListener(new btnClickListener());
         iBtnSet.setOnClickListener(new btnClickListener());
+
+        // Set buttonHelp color from settings
+        SharedPreferences sPref = getPreferences(MODE_PRIVATE);
+        String strColor = sPref.getString("setBtnColor", "non");
+        switch (strColor) {
+            case "red" :
+                btnHelp.setBackgroundColor(13730176);
+                break;
+            case "Blue" :
+                btnHelp.setBackgroundColor(6579455);
+                break;
+            case "Black" :
+                btnHelp.setBackgroundColor(0);
+                break;
+            case "Yelow" :
+                btnHelp.setBackgroundColor(16770565);
+                break;
+        }
     }
 
     class btnClickListener implements View.OnClickListener {

@@ -30,35 +30,4 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>Android API 27 Platform</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.32843137" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ScopeChooserConfigurable.UI">
-        <settings>
-          <last-edited>Test_Project</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-          <order>
-            <scope name="Test_Project" />
-          </order>
-        </settings>
-      </state>
-    </states>
-  </component>
 </project>

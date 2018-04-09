@@ -1,5 +1,6 @@
 package com.example.mirsky.myemergencybot;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -34,22 +35,35 @@ public class newContactActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
 
+        dbHelper dbh = new dbHelper(this);
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", eTxtName.getText().toString() );
+        db.insert("contact", null, values);
+
     }
 
-    class bdHelper extends SQLiteOpenHelper {
+    class dbHelper extends SQLiteOpenHelper {
 
-        final static String DATABASE_NAME = "MyDB1";
-        final static int DATABASE_VERSION = 1;
+        static final String DBNAME = "MainDB";
+        static final int DBVERSION = 1;
 
-        public bdHelper(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        public dbHelper(Context context) {
+            super(context, DBNAME, null, DBVERSION);
         }
 
         @Override
-        public void onCreate(SQLiteDatabase db) {
-            //db.execSQL("CREATE TABLE " +
-            //        " ");
-            // TODO Сделать бд
+        public void onCreate (SQLiteDatabase db) {
+            db.execSQL( " CREATE TABLE if not exists `contact` (" +
+                    "_ID int (10) primary key," +
+                    "name varchar (255)," +
+                    "phone varchar (30)," +
+                    "mail varchar (255)" +
+                    ") " );
+            db.execSQL( " CREATE TABLE if not exists `message` (" +
+                    "_ID int (10) primary key," +
+                    "text varchar (255)" +
+                    ") " );
         }
 
         @Override
