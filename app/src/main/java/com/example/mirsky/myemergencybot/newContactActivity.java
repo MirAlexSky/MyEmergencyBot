@@ -13,11 +13,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class newContactActivity extends AppCompatActivity implements View.OnClickListener{
 
-    EditText eTxtPhoneNumb, eTxtName, eTxtNote;
+    EditText eTxtPhoneNumb, eTxtName, eTxtMail;
     Button btnCreate;
+    DBHelper dbh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,49 +28,20 @@ public class newContactActivity extends AppCompatActivity implements View.OnClic
 
         eTxtPhoneNumb = findViewById(R.id.eTxtPhoneNum);
         eTxtName = findViewById(R.id.eTxtName);
-        eTxtNote = findViewById(R.id.eTxtNote);
+        eTxtMail = findViewById(R.id.eTxtNote);
         btnCreate = findViewById(R.id.btnCreat);
 
         btnCreate.setOnClickListener(this);
+        // DBHelper declaration
+        dbh = new DBHelper(this);
     }
 
     @Override
     public void onClick(View v) {
+        dbh.createNewContact(eTxtName.toString(), eTxtPhoneNumb.toString(), eTxtMail.toString());
 
-        dbHelper dbh = new dbHelper(this);
-        SQLiteDatabase db = dbh.getReadableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("name", eTxtName.getText().toString() );
-        db.insert("contact", null, values);
-
+        Toast.makeText(this, "Новый контакт успешно добвален", Toast.LENGTH_SHORT)
+                .show();
     }
 
-    class dbHelper extends SQLiteOpenHelper {
-
-        static final String DBNAME = "MainDB";
-        static final int DBVERSION = 1;
-
-        public dbHelper(Context context) {
-            super(context, DBNAME, null, DBVERSION);
-        }
-
-        @Override
-        public void onCreate (SQLiteDatabase db) {
-            db.execSQL( " CREATE TABLE if not exists `contact` (" +
-                    "_ID int (10) primary key," +
-                    "name varchar (255)," +
-                    "phone varchar (30)," +
-                    "mail varchar (255)" +
-                    ") " );
-            db.execSQL( " CREATE TABLE if not exists `message` (" +
-                    "_ID int (10) primary key," +
-                    "text varchar (255)" +
-                    ") " );
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        }
-    }
 }

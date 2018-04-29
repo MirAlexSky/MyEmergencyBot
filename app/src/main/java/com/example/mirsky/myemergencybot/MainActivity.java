@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     static final double APP_VERSION = 1.0;
+    static final String TAG = "Check";
 
     TextView txtV;
     Button btnHelp;
@@ -32,11 +34,18 @@ public class MainActivity extends AppCompatActivity {
         btnHelp.setOnClickListener(new btnClickListener());
         iBtnSet.setOnClickListener(new btnClickListener());
 
-        // Set buttonHelp color from settings
-        SharedPreferences sPref = getPreferences(MODE_PRIVATE);
-        String strColor = sPref.getString("setBtnColor", "non");
-        switch (strColor) {
-            case "red" :
+        //loadSettings();
+
+    }
+
+    private void loadSettings() {
+
+        //Set Help Button's Color
+
+        SharedPreferences settings = getSharedPreferences("MySet", MODE_PRIVATE);
+        String ColorOfButton = settings.getString(ButtonSettingsActivity.SET_BTN_COLOR, "null");
+        switch (ColorOfButton) {
+            case "Red" :
                 btnHelp.setBackgroundColor(13730176);
                 break;
             case "Blue" :
