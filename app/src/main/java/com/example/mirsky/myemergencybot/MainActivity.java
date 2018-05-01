@@ -1,13 +1,18 @@
 package com.example.mirsky.myemergencybot;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     TextView txtV;
     Button btnHelp;
     ImageButton iBtnSet;
+    LinearLayout linerContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
         btnHelp = findViewById(R.id.btnHelp);
         iBtnSet = findViewById(R.id.iBtnSet);
         txtV = findViewById(R.id.txtV);
+        linerContacts = findViewById(R.id.linLayoutContacts);
+
+        // Fill linerContacts
+        fillContacts();
 
         txtV.setText(String.valueOf(APP_VERSION));
 
@@ -36,6 +46,30 @@ public class MainActivity extends AppCompatActivity {
 
         //loadSettings();
 
+    }
+
+    private void fillContacts() {
+        DBHelper dbh = new DBHelper(this);
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        Cursor cursor = db.query("contact",null,null, null,
+                null, null, null);
+
+        TextView txtContact = new TextView(this);
+
+        int contactNameIndex = cursor.getColumnIndex("name");
+
+        Log.i(TAG, "contactNameIndex = " + contactNameIndex);
+        while (cursor.moveToNext()) {
+            String contactName = cursor.getString(contactNameIndex);
+            Log.i(TAG, "contactName = " + contactName);
+
+            txtContact.setText(contactName);
+            LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            linerContacts.addView(txtContact,lParams);
+        }
+        cursor.close();
     }
 
     private void loadSettings() {

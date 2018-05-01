@@ -44,7 +44,6 @@
             android:ems="10"
             android:inputType="phone"
             android:padding="16dp"
-            android:text="Номер телефона"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,14 +60,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/eTxtNote"
+            android:id="@+id/eTxtMail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:ems="10"
             android:inputType="textAutoCorrect|textMultiLine"
             android:padding="16dp"
-            android:text="Заметка"
+            android:text="Mail"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

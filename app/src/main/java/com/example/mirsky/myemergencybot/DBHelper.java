@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
         static final String DBNAME = "MainDB";
+        static final String TBL_CONTACT = "contact";
+        static final String TBL_MESSAGE = "message";
         static final int DBVERSION = 1;
 
         public DBHelper(Context context) {
@@ -33,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         void createNewContact(String name, String phone, String mail) {
-            SQLiteDatabase db = this.getReadableDatabase();
+            SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put( "name", name );
             values.put( "phone", phone );

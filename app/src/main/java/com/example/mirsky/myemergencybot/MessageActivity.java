@@ -1,6 +1,5 @@
 package com.example.mirsky.myemergencybot;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,50 +13,48 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class ContactsActivity extends AppCompatActivity {
+public class MessageActivity extends AppCompatActivity {
 
     static final String TAG = "Check";
+    LinearLayout msgLinLayout;
 
-    FloatingActionButton fActBtn;
-    LinearLayout linerContacts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
+        setContentView(R.layout.activity_message);
 
-        fActBtn = findViewById(R.id.fActButton);
-        fActBtn.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.newMessageFub);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ContactsActivity.this, newContactActivity.class));
+            public void onClick(View view) {
+
             }
         });
 
-        linerContacts = findViewById(R.id.linLayout);
+        msgLinLayout = findViewById(R.id.msgLinLayout);
 
-        fillContacts();
+        fillMessage();
+
     }
 
-    private void fillContacts() {
+    private void fillMessage() {
         DBHelper dbh = new DBHelper(this);
         SQLiteDatabase db = dbh.getReadableDatabase();
-        Cursor cursor = db.query("contact",null,null, null,
+        Cursor cursor = db.query(DBHelper.TBL_MESSAGE,null,null, null,
                 null, null, null);
 
-        TextView txtContact = new TextView(this);
+        TextView txtMessage = new TextView(this);
 
-        int contactNameIndex = cursor.getColumnIndex("name");
+        int messageTextIndex = cursor.getColumnIndex("text");
 
-        Log.i(TAG, "contactNameIndex = " + contactNameIndex);
         while (cursor.moveToNext()) {
-            String contactName = cursor.getString(contactNameIndex);
-            Log.i(TAG, "contactName = " + contactName);
+            String messageText = cursor.getString(messageTextIndex);
 
-            txtContact.setText(contactName);
+            txtMessage.setText(messageText);
             LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
-            linerContacts.addView(txtContact,lParams);
+            msgLinLayout.addView(txtMessage,lParams);
         }
         cursor.close();
     }

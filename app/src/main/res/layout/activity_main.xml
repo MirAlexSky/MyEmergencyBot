@@ -33,13 +33,13 @@
         android:layout_width="79dp"
         android:layout_height="57dp"
         android:layout_marginBottom="6dp"
-        android:layout_marginEnd="296dp"
+        android:layout_marginStart="9dp"
         android:background="@null"
         android:contentDescription="@string/set"
         android:elevation="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_menu_manage" />
 
     <LinearLayout
@@ -66,7 +66,8 @@
         app:layout_constraintBottom_toTopOf="@+id/btnHelp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linLayoutContacts"
-        app:layout_constraintTop_toBottomOf="@+id/textView"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView4"
@@ -97,6 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="56dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnHelp"
         tools:text="Ver: 1.0" />

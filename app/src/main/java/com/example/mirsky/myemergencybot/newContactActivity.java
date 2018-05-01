@@ -1,5 +1,6 @@
 package com.example.mirsky.myemergencybot;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ public class newContactActivity extends AppCompatActivity implements View.OnClic
     Button btnCreate;
     DBHelper dbh;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,20 +31,34 @@ public class newContactActivity extends AppCompatActivity implements View.OnClic
 
         eTxtPhoneNumb = findViewById(R.id.eTxtPhoneNum);
         eTxtName = findViewById(R.id.eTxtName);
-        eTxtMail = findViewById(R.id.eTxtNote);
+        eTxtMail = findViewById(R.id.eTxtMail);
         btnCreate = findViewById(R.id.btnCreat);
 
         btnCreate.setOnClickListener(this);
+        eTxtName.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (eTxtName.getText().toString().equals("Имя")) {
+                    eTxtName.setText(null);
+                }
+                return false;
+            }
+        });
         // DBHelper declaration
         dbh = new DBHelper(this);
     }
 
     @Override
     public void onClick(View v) {
-        dbh.createNewContact(eTxtName.toString(), eTxtPhoneNumb.toString(), eTxtMail.toString());
+        dbh.createNewContact(eTxtName.getText().toString(), eTxtPhoneNumb.getText().toString(),
+                eTxtMail.getText().toString());
 
         Toast.makeText(this, "Новый контакт успешно добвален", Toast.LENGTH_SHORT)
                 .show();
+
+        eTxtPhoneNumb.setText(null);
+        eTxtName.setText(null);
+        eTxtMail.setText(null);
     }
 
 }
