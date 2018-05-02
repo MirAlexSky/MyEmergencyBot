@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnHelp;
     ImageButton iBtnSet;
     LinearLayout linerContacts;
+    LinearLayout linerMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +36,12 @@ public class MainActivity extends AppCompatActivity {
         iBtnSet = findViewById(R.id.iBtnSet);
         txtV = findViewById(R.id.txtV);
         linerContacts = findViewById(R.id.linLayoutContacts);
+        linerMessage = findViewById(R.id.linLayoutMessage);
 
         // Fill linerContacts
         fillContacts();
+        // Fill linerMessage
+        fillMessage();
 
         txtV.setText(String.valueOf(APP_VERSION));
 
@@ -48,25 +52,66 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        linerContacts.removeAllViews();
+        linerMessage.removeAllViews();
+        fillContacts();
+        fillMessage();
+        //loadSettings();
+    }
+
+
+    private void fillMessage() {
+
+        String messageText;
+        TextView txtMessage;
+
+        DBHelper dbh = new DBHelper(this);
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        Cursor cursor = db.query(DBHelper.TBL_MESSAGE,null,null, null,
+                null, null, null);
+
+        int messageTextIndex = cursor.getColumnIndex("text");
+
+        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        while (cursor.moveToNext()) {
+            messageText = cursor.getString(messageTextIndex);
+            txtMessage = new TextView(this);
+            txtMessage.setText(messageText);
+            linerMessage.addView(txtMessage,lParams);
+        }
+        cursor.close();
+
+    }
+
     private void fillContacts() {
+
+        String contactName;
+        TextView txtContact;
+
         DBHelper dbh = new DBHelper(this);
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor cursor = db.query("contact",null,null, null,
                 null, null, null);
 
-        TextView txtContact = new TextView(this);
-
         int contactNameIndex = cursor.getColumnIndex("name");
 
-        Log.i(TAG, "contactNameIndex = " + contactNameIndex);
+        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
         while (cursor.moveToNext()) {
-            String contactName = cursor.getString(contactNameIndex);
-            Log.i(TAG, "contactName = " + contactName);
+            contactName = cursor.getString(contactNameIndex);
+
+            txtContact = new TextView(this);
 
             txtContact.setText(contactName);
-            LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
             linerContacts.addView(txtContact,lParams);
         }
         cursor.close();

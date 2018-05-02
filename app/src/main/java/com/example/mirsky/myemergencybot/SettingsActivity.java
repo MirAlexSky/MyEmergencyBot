@@ -46,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
                     startActivity(new Intent(SettingsActivity.this, ContactsActivity.class));
                     break;
                 case R.id.txtMessage:
-                    justMessage("Эта часть приложения ещё доробатывается");
+                    startActivity(new Intent(SettingsActivity.this, MessageActivity.class));
                     break;
                 case R.id.txtButton:
                     justMessage("Эта часть приложения ещё доробатывается");

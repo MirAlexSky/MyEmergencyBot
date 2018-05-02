@@ -50,15 +50,20 @@ public class newContactActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        dbh.createNewContact(eTxtName.getText().toString(), eTxtPhoneNumb.getText().toString(),
-                eTxtMail.getText().toString());
 
-        Toast.makeText(this, "Новый контакт успешно добвален", Toast.LENGTH_SHORT)
-                .show();
+        switch (v.getId()) {
+            case R.id.btnCreat:
+            dbh.createNewContact(eTxtName.getText().toString(), eTxtPhoneNumb.getText().toString(),
+                    eTxtMail.getText().toString());
 
-        eTxtPhoneNumb.setText(null);
-        eTxtName.setText(null);
-        eTxtMail.setText(null);
+            Toast.makeText(this, "Новый контакт успешно добвален", Toast.LENGTH_SHORT)
+                    .show();
+
+            eTxtPhoneNumb.setText(null);
+            eTxtName.setText(null);
+            eTxtMail.setText(null);
+            break;
+        }
     }
 
 }

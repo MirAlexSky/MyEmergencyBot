@@ -15,4 +15,8 @@
     <string name="title_activity_new_contact">newContactActivity</string>
     <string name="title_activity_button_settings">ButtonSettingsActivity</string>
     <string name="title_activity_message">MessageActivity</string>
+    <string name="title_activity_new_message">NewMessageActivity</string>
+    <string name="AddMessage">Добавить</string>
+    <string name="Create">Создать</string>
+    <string name="New_contact">Новый контакт</string>
 </resources>

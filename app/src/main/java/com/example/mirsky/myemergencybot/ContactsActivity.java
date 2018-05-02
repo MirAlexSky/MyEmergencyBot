@@ -38,25 +38,34 @@ public class ContactsActivity extends AppCompatActivity {
         fillContacts();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        linerContacts.removeAllViews();
+        fillContacts();
+    }
+
     private void fillContacts() {
+        String contactName;
+        TextView txtContact;
+
         DBHelper dbh = new DBHelper(this);
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor cursor = db.query("contact",null,null, null,
                 null, null, null);
 
-        TextView txtContact = new TextView(this);
-
         int contactNameIndex = cursor.getColumnIndex("name");
 
-        Log.i(TAG, "contactNameIndex = " + contactNameIndex);
+        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
         while (cursor.moveToNext()) {
-            String contactName = cursor.getString(contactNameIndex);
-            Log.i(TAG, "contactName = " + contactName);
+            contactName = cursor.getString(contactNameIndex);
+
+            txtContact = new TextView(this);
 
             txtContact.setText(contactName);
-            LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
             linerContacts.addView(txtContact,lParams);
         }
         cursor.close();

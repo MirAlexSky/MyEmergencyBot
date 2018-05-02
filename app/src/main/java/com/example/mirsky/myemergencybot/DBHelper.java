@@ -41,6 +41,12 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put( "phone", phone );
             values.put( "mail", mail );
             db.insert("contact", null, values);
-    }
+        }
 
+        void addNewMessage(String message) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put( "text", message );
+            db.insert("message", null, values);
+        }
 }

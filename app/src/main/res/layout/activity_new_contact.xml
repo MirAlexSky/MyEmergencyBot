@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:background="@color/colorForButton"
-        android:text="Создать"
+        android:text="@string/Create"
         android:textAllCaps="false"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:text="Новый контакт"
+            android:text="@string/New_contact"
             android:textColor="@android:color/black"
             android:textSize="30sp" />
 

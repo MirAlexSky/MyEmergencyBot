@@ -1,5 +1,6 @@
 package com.example.mirsky.myemergencybot;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,7 +28,8 @@ public class MessageActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intentNewMessage = new Intent(MessageActivity.this, NewMessageActivity.class);
+                startActivity(intentNewMessage);
             }
         });
 
@@ -37,25 +39,38 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        msgLinLayout.removeAllViews();
+        fillMessage();
+    }
+
     private void fillMessage() {
+
+
+        String messageText;
+        TextView txtMessage;
+
         DBHelper dbh = new DBHelper(this);
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor cursor = db.query(DBHelper.TBL_MESSAGE,null,null, null,
                 null, null, null);
 
-        TextView txtMessage = new TextView(this);
-
         int messageTextIndex = cursor.getColumnIndex("text");
 
-        while (cursor.moveToNext()) {
-            String messageText = cursor.getString(messageTextIndex);
+        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
 
+        while (cursor.moveToNext()) {
+            messageText = cursor.getString(messageTextIndex);
+            txtMessage = new TextView(this);
             txtMessage.setText(messageText);
-            LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
             msgLinLayout.addView(txtMessage,lParams);
         }
+
         cursor.close();
     }
 
