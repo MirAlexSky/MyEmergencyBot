@@ -1,18 +1,19 @@
 package com.example.mirsky.myemergencybot;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,9 +32,8 @@ public class MainActivity extends AppCompatActivity {
     ImageButton iBtnSet;
     LinearLayout linerContacts;
     LinearLayout linerMessage;
-    ListView listViewContacts;
 
-    ArrayAdapter<String> adapter;
+    RecyclerView recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +45,16 @@ public class MainActivity extends AppCompatActivity {
         txtV = findViewById(R.id.txtV);
         linerContacts = findViewById(R.id.linLayoutContacts);
         linerMessage = findViewById(R.id.linLayoutMessage);
-        listViewContacts = findViewById(R.id.listContacts);
+        recycler = findViewById(R.id.rv);
 
-        // Fill linerContacts
+        RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(recycler.getContext(), DividerItemDecoration.VERTICAL);
+        recycler.setLayoutManager(lm);
+        recycler.addItemDecoration(itemDecoration);
+
+        // Fill Contacts
         fillContacts();
-        Log.i(TAG, "fillContacts : Success");
-        // Fill linerMessage
+        // Fill Message
         fillMessage();
 
         txtV.setText(String.valueOf(APP_VERSION));
@@ -59,112 +63,80 @@ public class MainActivity extends AppCompatActivity {
         iBtnSet.setOnClickListener(new btnClickListener());
 
         //loadSettings();
-        Log.i(TAG, "Create : Success");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        //linerContacts.removeAllViews();
-        //fillContacts();
-        adapter.notifyDataSetChanged();
 
-        linerMessage.removeAllViews();
-        fillMessage();
+
+        //fillContacts();
+        //fillMessage();
+        //fillMessage();
+        //fillContacts();
+
         //loadSettings();
     }
 
 
     private void fillMessage() {
 
-        String messageText;
-        TextView txtMessage;
+        Cursor cursor = createCursor(DBHelper.TBL_MESSAGE);
+        int tableNum = cursor.getColumnIndex("text");
+
+        RVAdapter adapter = new RVAdapter(cursor,tableNum);
+        recycler.setAdapter(adapter);
+
+//        if (null != adapter) {
+//
+//        } else {
+//            LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
+//                    ViewGroup.LayoutParams.MATCH_PARENT,
+//                    ViewGroup.LayoutParams.WRAP_CONTENT);
+//
+//            TextView errTxt = new TextView(this);
+//            errTxt.setText("Что-то пошло не так, изените");
+//            listViewMessage.addView(errTxt, lParams);
+//        }
+
+    }
+
+    private Cursor createCursor( String table) {
 
         DBHelper dbh = new DBHelper(this);
         SQLiteDatabase db = dbh.getReadableDatabase();
-        Cursor cursor = db.query(DBHelper.TBL_MESSAGE,null,null, null,
+        Cursor cursor = db.query(table,null,null, null,
                 null, null, null);
 
-        int messageTextIndex = cursor.getColumnIndex("text");
-
-        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        while (cursor.moveToNext()) {
-            messageText = cursor.getString(messageTextIndex);
-            txtMessage = new TextView(this);
-            txtMessage.setText(messageText);
-            linerMessage.addView(txtMessage,lParams);
-        }
-        cursor.close();
-
+        return cursor;
     }
 
     private void fillContacts() {
 
-        String contactName;
-        ArrayList<String> contactsList = new ArrayList<>();
-        int contactNameIndex;
-
-        DBHelper dbh = new DBHelper(this);
-        SQLiteDatabase db = dbh.getReadableDatabase();
-        Cursor cursor = db.query("contact",null,null, null,
-                null, null, null);
-
-        contactNameIndex = cursor.getColumnIndex("name");
-
-        while (cursor.moveToNext()) {
-            contactName = cursor.getString(contactNameIndex);
-            contactsList.add(contactName);
-            Log.i(TAG, "Добавлен элемент в List - " + contactName);
-        }
-        cursor.close();
-
-        try {
-        adapter = new ArrayAdapter<>(this, R.layout.textview, contactsList);
-        }
-        catch (Exception e) {
-            justMessage("Адаптер не создан, видимо что-то не так с макетом TextView");
-        }
-
-        if (null != adapter) {
-        listViewContacts.setAdapter(adapter);
-        } else {
-            LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            TextView errTxt = new TextView(this);
-            errTxt.setText("Что-то пошло не так, изените");
-            listViewContacts.addView(errTxt, lParams);
-        }
-
-
-//        String contactName;
-//        TextView txtContact;
+//        ArrayList<String> contactsList = new ArrayList<>();
 //
-//        DBHelper dbh = new DBHelper(this);
-//        SQLiteDatabase db = dbh.getReadableDatabase();
-//        Cursor cursor = db.query("contact",null,null, null,
-//                null, null, null);
+//        fillArrayFromCursor(contactsList, DBHelper.TBL_CONTACT, "name");
 //
-//        int contactNameIndex = cursor.getColumnIndex("name");
-//
-//        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT);
-//
-//        while (cursor.moveToNext()) {
-//            contactName = cursor.getString(contactNameIndex);
-//
-//            txtContact = new TextView(this);
-//
-//            txtContact.setText(contactName);
-//            linerContacts.addView(txtContact,lParams);
+//        try {
+//        adapterContacts = new ArrayAdapter<>(this, R.layout.textview, contactsList);
 //        }
-//        cursor.close();
+//        catch (Exception e) {
+//            justMessage("Адаптер не создан, видимо что-то не так с макетом TextView");
+//        }
+//
+//        if (null != adapterContacts) {
+//        listViewContacts.setAdapter(adapterContacts);
+//        } else {
+//            LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
+//                    ViewGroup.LayoutParams.MATCH_PARENT,
+//                    ViewGroup.LayoutParams.WRAP_CONTENT);
+//
+//            TextView errTxt = new TextView(this);
+//            errTxt.setText("Что-то пошло не так, изените");
+//            listViewContacts.addView(errTxt, lParams);
+//            //TODO Размер шрифта
+//        }
     }
 
     private void loadSettings() {
