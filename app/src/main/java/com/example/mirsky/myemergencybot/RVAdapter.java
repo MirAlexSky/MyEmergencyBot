@@ -18,17 +18,21 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
 
             super(itemView);
 
-            cv = itemView.findViewById(R.id.rv);
+            cv = itemView.findViewById(R.id.cvp);
             Text = itemView.findViewById(R.id.MainText);
         }
     }
 
     private Cursor cursor;
-    private int tableNum;
+    private int columnNum;
+
+    public void setCursor(Cursor cursor) {
+        this.cursor = cursor;
+    }
 
 
-    RVAdapter(Cursor cursor, int tableNum) {
-        this.tableNum = tableNum;
+    RVAdapter(Cursor cursor, int columnNum) {
+        this.columnNum = columnNum;
         this.cursor = cursor;
     }
 
@@ -41,7 +45,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         cursor.moveToPosition(position);
-        holder.Text.setText(cursor.getString(tableNum));
+        holder.Text.setText(cursor.getString(columnNum));
     }
 
     @Override

@@ -9,18 +9,12 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +27,11 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout linerContacts;
     LinearLayout linerMessage;
 
-    RecyclerView recycler;
+    RecyclerView msgRecycler;
+    RecyclerView contactsRecycler;
+
+    RVAdapter adapterContacts;
+    RVAdapter adapterMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +43,23 @@ public class MainActivity extends AppCompatActivity {
         txtV = findViewById(R.id.txtV);
         linerContacts = findViewById(R.id.linLayoutContacts);
         linerMessage = findViewById(R.id.linLayoutMessage);
-        recycler = findViewById(R.id.rv);
+        msgRecycler = findViewById(R.id.rvMsg);
+        contactsRecycler = findViewById(R.id.rvContacts);
 
-        RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(recycler.getContext(), DividerItemDecoration.VERTICAL);
-        recycler.setLayoutManager(lm);
-        recycler.addItemDecoration(itemDecoration);
+        // ini msgRecycle
+        RecyclerView.LayoutManager lmMsg = new LinearLayoutManager(this);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(msgRecycler.getContext(), DividerItemDecoration.VERTICAL);
+        msgRecycler.setLayoutManager(lmMsg);
+        msgRecycler.addItemDecoration(itemDecoration);
+        // ini contactsRecycle
+        RecyclerView.LayoutManager lmContacts = new LinearLayoutManager(this);
+        contactsRecycler.setLayoutManager(lmContacts);
+        contactsRecycler.addItemDecoration(itemDecoration);
 
         // Fill Contacts
-        fillContacts();
+        adapterContacts = fillRecycle(DBHelper.TBL_CONTACT, "name", contactsRecycler);
         // Fill Message
-        fillMessage();
+        adapterMsg = fillRecycle(DBHelper.TBL_MESSAGE, "text", msgRecycler);
 
         txtV.setText(String.valueOf(APP_VERSION));
 
@@ -67,76 +71,38 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+
+        // Update recycle
+        updateAdapters();
         super.onResume();
-
-
-
-        //fillContacts();
-        //fillMessage();
-        //fillMessage();
-        //fillContacts();
-
-        //loadSettings();
     }
 
+    private RVAdapter fillRecycle(String tbl, String columnName, RecyclerView recycler) {
 
-    private void fillMessage() {
+        Cursor cursor = createCursor(tbl);
+        int columnNum = cursor.getColumnIndex(columnName);
 
-        Cursor cursor = createCursor(DBHelper.TBL_MESSAGE);
-        int tableNum = cursor.getColumnIndex("text");
-
-        RVAdapter adapter = new RVAdapter(cursor,tableNum);
+        RVAdapter adapter = new RVAdapter(cursor,columnNum);
         recycler.setAdapter(adapter);
 
-//        if (null != adapter) {
-//
-//        } else {
-//            LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    ViewGroup.LayoutParams.WRAP_CONTENT);
-//
-//            TextView errTxt = new TextView(this);
-//            errTxt.setText("Что-то пошло не так, изените");
-//            listViewMessage.addView(errTxt, lParams);
-//        }
+        cursor.close();
 
+        return adapter;
     }
 
     private Cursor createCursor( String table) {
 
         DBHelper dbh = new DBHelper(this);
         SQLiteDatabase db = dbh.getReadableDatabase();
-        Cursor cursor = db.query(table,null,null, null,
+        return db.query(table,null,null, null,
                 null, null, null);
-
-        return cursor;
     }
 
-    private void fillContacts() {
-
-//        ArrayList<String> contactsList = new ArrayList<>();
-//
-//        fillArrayFromCursor(contactsList, DBHelper.TBL_CONTACT, "name");
-//
-//        try {
-//        adapterContacts = new ArrayAdapter<>(this, R.layout.textview, contactsList);
-//        }
-//        catch (Exception e) {
-//            justMessage("Адаптер не создан, видимо что-то не так с макетом TextView");
-//        }
-//
-//        if (null != adapterContacts) {
-//        listViewContacts.setAdapter(adapterContacts);
-//        } else {
-//            LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    ViewGroup.LayoutParams.WRAP_CONTENT);
-//
-//            TextView errTxt = new TextView(this);
-//            errTxt.setText("Что-то пошло не так, изените");
-//            listViewContacts.addView(errTxt, lParams);
-//            //TODO Размер шрифта
-//        }
+    private void updateAdapters() {
+        adapterMsg.setCursor(createCursor(DBHelper.TBL_MESSAGE));
+        adapterContacts.setCursor(createCursor(DBHelper.TBL_CONTACT));
+        adapterMsg.notifyDataSetChanged();
+        adapterContacts.notifyDataSetChanged();
     }
 
     private void loadSettings() {
